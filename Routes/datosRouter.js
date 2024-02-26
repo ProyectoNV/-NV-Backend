@@ -5,8 +5,8 @@ const adminController =require('../Controllers/Administrador/AdminController');
 const rutaDatos = express.Router();
 
 
-rutaDatos.get("/",adminController.VerDocente)
-rutaDatos.post("/agregar",adminController.AgregarDocente)
+rutaDatos.get("/ver_docentes",adminController.VerDocente)
+rutaDatos.post("/registrar_Docente",adminController.AgregarDocente)
 
 //peticones de Agregar horario
 rutaDatos.get("/verHorarios", adminController.mostrarHorario);
