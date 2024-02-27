@@ -1,0 +1,66 @@
+### 
+ 
+GET http://localhost:4000/verHorarios HTTP/1.1
+
+### 
+
+POST http://localhost:4000/agregarHorarios HTTP/1.1
+Content-Type: application/json
+
+{
+    "Dia_semana": "Lunes",
+    "Hora_inicio": "15:00",
+    "Hora_fin": "16:59",
+    "Lugar": "salon 3",
+    "estado": true
+}
+
+###
+
+GET http://localhost:4000/opsionesActividad HTTP/1.1
+
+### 
+
+POST http://localhost:4000/agregarHorariosActividad HTTP/1.1
+Content-Type: application/json
+
+{
+    "id_actividad": 1,
+    "horario_id": 9
+}
+
+###
+
+GET http://localhost:4000/filtroHorarios HTTP/1.1
+
+###
+
+GET  http://localhost:4000/buscarHorarios/Salon1/lunes HTTP/1.1
+
+
+###
+
+PUT http://localhost:4000/actualizarEstado/46 HTTP/1.1
+Content-Type: application/json
+
+{
+    "estado": 0
+}
+
+
+###
+
+PUT http://localhost:4000/actualizarHorario/44 HTTP/1.1
+Content-Type: application/json
+
+{
+    "Dia_semana": "viernes",
+    "Hora_inicio": "18:23:00",
+    "Hora_fin": "15:30:00",
+    "Lugar": "salon4",
+    "estado": true
+}
+
+###
+
+GET http://localhost:4000/buscarID/19 HTTP/1.1

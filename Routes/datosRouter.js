@@ -15,5 +15,8 @@ rutaDatos.get("/filtroHorarios", adminController.filtrarActividadesHorario);
 rutaDatos.get("/buscarHorarios/:Lugar/:Dia_semana", adminController.buscarHorariosIguales);
 rutaDatos.post("/agregarHorarios", adminController.agregarHorario);
 rutaDatos.post("/agregarHorariosActividad", adminController.agregarHorarioActividad);
+rutaDatos.put("/actualizarEstado/:id_horario", adminController.actualizarestado);
+rutaDatos.put("/actualizarHorario/:id_horario", adminController.actualizarhorario);
+rutaDatos.get("/buscarID/:id_horario", adminController.buscarIdHorario);
 
 module.exports=rutaDatos;

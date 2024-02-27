@@ -43,7 +43,19 @@ const mostrarHorario = async (req, res)=>{
         res.status(500);
         res.send(error.message);
     }
-    
+}
+
+const buscarIdHorario = async (req, res)=>{
+    try{
+        const {id_horario} = req.params;
+        const connection = await conn;
+        const [result] = await connection.query("SELECT estado FROM horario WHERE id_horario = ?", id_horario)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
 }
 
 const mostrarOpcionesDeActividad = async (req, res)=>{
@@ -61,7 +73,7 @@ const mostrarOpcionesDeActividad = async (req, res)=>{
 const filtrarActividadesHorario = async (req, res)=>{
     try{
         const connection = await conn;
-        const [resuld] = await connection.query("SELECT horario.id_horario, horario.Dia_semana, horario.Hora_inicio, horario.Hora_fin, horario.Lugar FROM actividad_horario RIGHT JOIN horario ON actividad_horario.horario_id = horario.id_horario WHERE horario_id IS NULL");
+        const [resuld] = await connection.query("SELECT horario.id_horario, horario.Dia_semana, horario.Hora_inicio, horario.Hora_fin, horario.Lugar, horario.estado FROM actividad_horario RIGHT JOIN horario ON actividad_horario.horario_id = horario.id_horario WHERE (horario_id IS NULL) AND (estado = 1)");
         res.json(resuld)
     }catch(error){
         res.status(500);
@@ -111,6 +123,35 @@ const buscarHorariosIguales = async (req, res)=>{
     }
 }
 
+const actualizarestado = async (req, res)=>{
+    try{
+        const {estado} = req.body;
+        const {id_horario} = req.params;
+        const connection = await conn;
+        const result = await connection.query("UPDATE horario SET estado = ? WHERE id_horario = ?", [estado, id_horario]);
+        res.json(result)
+    }
+    catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
+const actualizarhorario = async (req, res)=>{
+    try{
+        const {Dia_semana, Hora_inicio, Hora_fin, Lugar, estado} = req.body;
+        const {id_horario} = req.params;
+        const valores ={Dia_semana, Hora_inicio, Hora_fin, Lugar, estado}
+        const connection = await conn;
+        const result = await connection.query("UPDATE horario SET ? WHERE id_horario = ?", [valores, id_horario]);
+        res.json(result)
+    }
+    catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
 
 module.exports={
     VerDocente,
@@ -120,5 +161,8 @@ module.exports={
     mostrarOpcionesDeActividad,
     agregarHorarioActividad,
     filtrarActividadesHorario,
-    buscarHorariosIguales
+    buscarHorariosIguales,
+    actualizarestado, 
+    actualizarhorario,
+    buscarIdHorario
 }
