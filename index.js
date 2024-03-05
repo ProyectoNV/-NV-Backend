@@ -1,9 +1,10 @@
 const express = require('express')
 const bodyparser = require('body-parser')
 const datosRouter = require('./Routes/datosRouter')
+const rutaHorarios = require('./Routes/horariosRouter')
 const cors = require('cors')
 const {conn} = require('./Model/conn')
-
+const {swaggerJSDOCs} = require('./swagger') 
 
 
 const app = express();
@@ -17,10 +18,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use("/",datosRouter);
+app.use("/horario", rutaHorarios);
 
+app.get("/", (req, res)=>{
+    res.send("Bienvenido a mi API conectandome a MYSQL...");
+});
 
 const puerto =process.env.port || 4000;
 
 app.listen(puerto,()=>{
-    console.log(`Escuchando en el puerto ${puerto}`)
+    console.log(`Escuchando en el puerto ${puerto}`);
+    swaggerJSDOCs(app, 4000);
 })
