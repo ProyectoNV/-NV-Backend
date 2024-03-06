@@ -133,8 +133,9 @@ const actualizarhorario = async (req, res)=>{
 
 const TraerCronograma = async (req, res)=>{
     try{
+        const {Dia_semana} = req.params;
         const connection = await conn;
-        const [resuld] = await connection.query("select H.Dia_semana, H.Hora_inicio, H.Hora_fin, H.Lugar, A.Nombre_actividad, U.Nombres, U.Apellidos from horario H inner join actividad_horario C on H.id_horario = horario_id inner join actividades A on A.id_actividad = C.id_actividad inner join docente_has_actividad S on S.Actividad_id = A.id_actividad inner join usuario U on U.id_usuario = S.id_docente;");
+        const [resuld] = await connection.query("select H.Dia_semana, H.Hora_inicio, H.Hora_fin, H.Lugar, C.id_actividad, C.horario_id, A.Nombre_actividad, U.Nombres, U.Apellidos from horario H inner join actividad_horario C on H.id_horario = horario_id inner join actividades A on A.id_actividad = C.id_actividad inner join docente_has_actividad S on S.Actividad_id = A.id_actividad inner join usuario U on U.id_usuario = S.id_docente WHERE H.Dia_semana = ?", Dia_semana);
         res.json(resuld)
     }catch(error){
         res.status(500);
@@ -142,6 +143,19 @@ const TraerCronograma = async (req, res)=>{
     }
     
 }
+
+const eliminarHorarioActividad = async (req, res)=>{
+    try{
+        const {id_actividad,horario_id } = req.params;
+        const connection = await conn;
+        const result = await connection.query("DELETE FROM actividad_horario WHERE (id_actividad = ?) AND (horario_id = ?)", [id_actividad, horario_id]);
+        res.json(result)
+    }
+    catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+};
 
 module.exports={
     VerDocente,
@@ -151,7 +165,8 @@ module.exports={
     agregarHorarioActividad,
     filtrarActividadesHorario,
     buscarHorariosIguales,
-    eliminarHorario, 
+    eliminarHorario,
+    eliminarHorarioActividad, 
     actualizarhorario,
     TraerCronograma
 }
