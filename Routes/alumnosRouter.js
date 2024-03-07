@@ -72,20 +72,21 @@ const rutaAlumno = express.Router();
  *              - celular_acudiente
  *          example: 
  *              pkfk_tdoc: TI
- *              numero_id : 1021665637
+ *              numero_id : 3142555
  *              id_rol : 12
- *              Nombres: Angel   
+ *              Nombres: Sandra 
  *              Apellidos : Gonzalez
- *              fecha_nacimiento : 2008-02-21
- *              genero : masculino
- *              correo: angel@gmail.com 
- *              celular : 3124560780
+ *              fecha_nacimiento : 2010-12-10
+ *              genero : femenino
+ *              correo: saragonzaaa_@gmail.com 
+ *              celular : 32047675645
  *              contrasena : angel1234
  *              estado : 1   
- *              nombre_acudiente : sofia piedrahita
- *              correo_acudiente : sofi@gmail.com
- *              celular_acudiente : 3145670912       
+ *              nombre_acudiente :  paula
+ *              correo_acudiente : paulabenavides@gmail.com
+ *              celular_acudiente : 3142425252       
  */
+
 
 /**
  * @swagger
@@ -163,17 +164,10 @@ rutaAlumno.post("/registraralumno", AlumnoController.regisAlumno);
 
 /**
  * @swagger
- * /alumno/actualizaralumno/{id_alumno}:
+ * /alumno/actualizaralumno:
  *  put:
  *      summary: actualizar alumno
  *      tags: [Usuario]
- *      parameters:
- *        - in : path
- *          name: id_alumno
- *          description: id del horario a alumno al a actualizar
- *          schema: 
- *              type: integer
- *          required: true
  *      requestBody:
  *          required: true
  *          content:
@@ -185,7 +179,7 @@ rutaAlumno.post("/registraralumno", AlumnoController.regisAlumno);
  *         '200':
  *           description: resgistro de los alumnos
  */
-rutaAlumno.put("/actualizaralumno/:identificacion", AlumnoController.actualizarAlumno);
+rutaAlumno.put("/actualizaralumno", AlumnoController.actualizarAlumno);
 
 
 /**
@@ -197,7 +191,7 @@ rutaAlumno.put("/actualizaralumno/:identificacion", AlumnoController.actualizarA
  *      parameters:
  *        - in : path
  *          name: id_usuario
- *          description: id del estado a actuazlizar
+ *          description: numero de identificacion 
  *          schema: 
  *              type: integer
  *          required: true
@@ -213,7 +207,25 @@ rutaAlumno.put("/actualizaralumno/:identificacion", AlumnoController.actualizarA
  *           description: actualizacion de estado 
  */
 
-rutaAlumno.put("/actualizarestado/:id_usuario", AlumnoController.actualizarEstado);
+rutaAlumno.put("/actualizarestado/:numero_id", AlumnoController.actualizarEstado);
 
+/**
+ * @swagger
+ * /alumno/consulta/{numero_id}:
+ *  get:
+ *      summary: mostrar usuario
+ *      tags: [Usuario]
+ *      parameters:
+ *        - in : path
+ *          name: numero_id
+ *          description: numero de identificacion del usuario a buscar 
+ *          schema: 
+ *              type: integer
+ *          required: true
+ *      responses:
+ *       '200':
+ *         description: infromacion del usuario con ese id
+ */
+rutaAlumno.get("/consulta/:numero_id", AlumnoController.Consultaid);
 
 module.exports = rutaAlumno;
