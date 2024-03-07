@@ -1,8 +1,8 @@
 const conn = require('../../Model/conn').promise();
-
+const bcryp = require('bcrypt')
 const VerDocente = async (req,res)=>{
     try {
-        const consulta="select u.pkfk_tdoc, u.numero_id, u.Nombres , u.Apellidos, u.celular, u.correo from usuario u inner join rol on u.id_rol = rol.id_rol where u.id_rol =11 and u.estado=1;"
+        const consulta="select id_usuario, pkfk_tdoc, numero_id, Nombres , Apellidos, celular, correo from usuario where id_rol =11 and estado=1;"
         const [resultado] = await conn.query(consulta)
 
         res.json(resultado)
@@ -15,26 +15,62 @@ const VerDocente = async (req,res)=>{
 const AgregarDocente = async(req,res)=>{
     try {
         const {tipoDoc,numeroId,nombres,apellidos,fechaNacimiento,genero,correo,celular}=req.body;
+        console.log(req.body)
+
+        if(!tipoDoc || !numeroId || !nombres || !apellidos || !fechaNacimiento || !genero || !correo || !celular){
+            res.send("Todos los campos son obligatorios")
+            return
+        }
+        const contraEncriptada = await bcryp.hash(numeroId,3);
         const consulta="SELECT * FROM usuario WHERE pkfk_tdoc = ? AND numero_id = ?";
         const [verificarUsuario] = await conn.query(consulta, [tipoDoc, numeroId]);
 
         console.log(verificarUsuario.length)
         if (verificarUsuario.length ===0){
-            await conn.query('INSERT INTO usuario (pkfk_tdoc,numero_id,id_rol,Nombres,Apellidos,fecha_nacimiento,genero,correo,celular,contrasena,estado) VALUES (?,?,?,?,?,?,?,?,?,?,?)',[tipoDoc,numeroId,11,nombres,apellidos,fechaNacimiento,genero,correo,celular,numeroId,1]);
-
-            await conn.query("INSERT INTO docente (tdoc_docente,id_docente) VALUES (?,?)",[tipoDoc,numeroId])
-
+            const respuesta = await conn.query('INSERT INTO usuario (pkfk_tdoc,numero_id,id_rol,Nombres,Apellidos,fecha_nacimiento,genero,correo,celular,contrasena,estado) VALUES (?,?,?,?,?,?,?,?,?,?,?)',[tipoDoc,numeroId,11,nombres,apellidos,fechaNacimiento,genero,correo,celular,contraEncriptada,1])
+            console.log(respuesta)
             res.json({message:"Usuario y docente creado correctamente"})
         }
-
     } catch (error) {
         console.error("Error al agregar al profesor :",error)
         res.status(500).json({message:"El profesor no pudo ser registrado "})
     }
+};
+const ActualizarDocente = async (req, res) => {
+    try {
+        const id_usuario = parseInt(req.params.id);
+        const {tipoDoc, Nombres, Apellidos, correo, celular } = req.body;
+        console.log(id_usuario)
+        // Verificar si el docente existe antes de actualizarlo
 
-}
+        const consulta = "UPDATE usuario SET pkfk_tdoc = ?, Nombres = ?,Apellidos = ?, correo = ?, celular = ? WHERE id_usuario = ?";
+        await conn.query(consulta, [tipoDoc, Nombres, Apellidos, correo, celular, id_usuario]);
+        
+        res.json({ message: "Datos del docente actualizados correctamente" });
+        
+    } catch (error) {
+        console.error("Error al actualizar al docente:", error);
+        res.status(500).json({ message: "Error al actualizar al docente" });
+    }
+};
+
+const EliminarDocente = async (req,res)=>{
+    try {
+        const id = parseInt(req.params.id)
+        console.log("**********************",id)
+
+        const consulta = "UPDATE usuario SET estado = ? WHERE id_usuario = ?"
+
+        const [respuesta] =await conn.query(consulta,[0,id])
+
+        console.log(respuesta)
+        res.json(respuesta)
+    } catch (error) {
+        console.log("No se pudo eliminar el docente error: ",error)
+    }
+};
+
 //Consultas de horario
-
 const mostrarOpcionesDeActividad = async (req, res)=>{
     try{
         const connection = await conn;
@@ -160,6 +196,8 @@ const eliminarHorarioActividad = async (req, res)=>{
 module.exports={
     VerDocente,
     AgregarDocente,
+    ActualizarDocente,
+    EliminarDocente,
     agregarHorario,
     mostrarOpcionesDeActividad,
     agregarHorarioActividad,

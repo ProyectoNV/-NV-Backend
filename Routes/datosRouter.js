@@ -8,9 +8,6 @@ const rutaDatos = express.Router();
 rutaDatos.post("/ingresar", loginController.IniciarSesion);
 
 
-rutaDatos.get("/ver_docentes",adminController.VerDocente)
-rutaDatos.post("/registrar_Docente",adminController.AgregarDocente)
-
 
 
 
