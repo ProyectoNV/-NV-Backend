@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const session = require('express-session');
 const bodyparser = require('body-parser')
 const datosRouter = require('./Routes/datosRouter')
 const rutaHorarios = require('./Routes/horariosRouter')
@@ -10,6 +11,11 @@ const {swaggerJSDOCs} = require('./swagger')
 
 
 const app = express();
+app.use(session({
+    secret: 'nv_cordination',
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 

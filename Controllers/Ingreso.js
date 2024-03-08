@@ -7,7 +7,7 @@ function IniciarSesion(req,res){
 
     
     //validar usuario
-    conn.query('SELECT contrasena FROM usuario WHERE correo= ? ',[correo],
+    conn.query('SELECT * FROM usuario WHERE correo= ? ',[correo],
     async(error,results)=>{
         console.log(results)
 
@@ -18,18 +18,53 @@ function IniciarSesion(req,res){
             console.log(contraseña_DB);
             const validacion_contraseñas = await bcrypt.compare(contrasena, contraseña_DB) 
             if (validacion_contraseñas){
+                if(results[0].id_rol == '11'){
+                    //const activi = conn.query('SELECT A.id_actividad, A.Nombre_actividad FROM usuario U inner join docente_has_actividad H ON U.id_usuario = H.id_docente inner join actividades A ON A.id_actividad = H.Actividad_id WHERE U.id_usuario = ?', results[0].id_usuario);
+                    req.session.usuario = {
+                        id: results[0].id_usuario,
+                        rol: results[0].id_rol,
+                        nombre: results[0].Nombres,
+                        apellido: results[0].Apellidos
+                    };
+                }
+                else if(results[0].id_rol == '12'){
+                    req.session.usuario = {
+                        id: results[0].id_usuario,
+                        rol: results[0].id_rol,
+                        nombre: results[0].Nombres,
+                        apellido: results[0].Apellidos
+                    };
+                }
+                else if(results[0].id_rol == '10'){
+                    req.session.usuario = {
+                        id: results[0].id_usuario,
+                        rol: results[0].id_rol,
+                        nombre: results[0].Nombres,
+                        apellido: results[0].Apellidos
+                    };
+                }
+                else{
+                    console.log("error rol");
+                }
+                const usuario = req.session.usuario;
                 res.json({
-                    mensaje:'Autenticacion exitosa'
-            })
+                    success: true,
+                    message:'Autenticacion exitosa',
+                    usuario: usuario
+                })
             }else{
                 res.json({
-                    mensaje:'Autenticacion errada'
+                    success: false,
+                    message:'Autenticacion errada'
                 })
             }
 
         }
         else{
-            res.json("No se encontro el usuario")
+            res.json({
+                success: false,
+                message: "No se encontro el usuario"
+            })
         }
     })
 

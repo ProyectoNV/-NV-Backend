@@ -218,9 +218,100 @@ rutaHorarios.post("/agregarHorariosActividad", adminController.agregarHorarioAct
 
 rutaHorarios.get("/opsionesActividad", adminController.mostrarOpcionesDeActividad);
 
-
+/**
+ * @swagger
+ * /horario/VerCronograma/{Dia_semana}:
+ *  get:
+ *      summary: Mostrar la informacion de todos los horarios que tengan una actividad segun el dia de la semana
+ *      tags: [actividad_horario]
+ *      parameters:
+ *        - in : path
+ *          name: Dia_semana
+ *          description: dia de la semana sobre los que se va a buscar horarios con actividades 
+ *          schema: 
+ *              type: string
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: informacion de horarios, actividades y usuarios que cumplen la condición
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          properties:
+ *                              Dia_semana:
+ *                                  type: string
+ *                                  description: Dia de la semana en que ocurre el horario
+ *                              Hora_inicio:
+ *                                  type: string
+ *                                  description: Hora en la que inicia el horario
+ *                              Hora_fin:
+ *                                  type: string
+ *                                  description: Hora en la que finaliza el horario
+ *                              Lugar:
+ *                                  type: string
+ *                                  description: Espacio asignado al horario
+ *                              id_actividad:
+ *                                  type: integer
+ *                                  description: id de la actividad asignada al horario
+ *                              horario_id:
+ *                                  type: integer
+ *                                  description: id del horario asignado a la actividad
+ *                              Nombre_actividad:
+ *                                  type: string
+ *                                  description: Nombre de la actividad asignada al horario
+ *                              Nombres:
+ *                                  type: string
+ *                                  description: Nombres del docente asignado a la actividad 
+ *                              Apellidos:
+ *                                  type: string
+ *                                  description: Apellidos del docente asignado a la actividad
+ *                          required:
+ *                              -Dia_semana
+ *                              -Hora_inicio
+ *                              -Hora_fin
+ *                              -Lugar
+ *                              -id_actividad
+ *                              -horario_id
+ *                              -Nombre_actividad
+ *                              -Nombres
+ *                              -Apellidos
+ *                          example: 
+ *                              Dia_semana: lunes
+ *                              Hora_inicio: 07:15:00
+ *                              Hora_fin: 08:30:00
+ *                              Lugar: FNVPT
+ *                              id_actividad: 1
+ *                              horario_id: 15
+ *                              Nombre_actividad: Fotografia
+ *                              Nombres: Juan Antonio
+ *                              Apellidos: Diaz Soler                        
+ */
 rutaHorarios.get("/VerCronograma/:Dia_semana", adminController.TraerCronograma);
 
+/**
+ * @swagger
+ * /horario/EliminarActividadHorario/{id_actividad}/{horario_id}:
+ *  delete:
+ *      summary: Se elimina un horario relacionado con una actividad
+ *      tags: [actividad_horario]
+ *      parameters:
+ *        - in : path
+ *          name: id_actividad
+ *          description: id de la actividad asignado a un horario
+ *          schema: 
+ *              type: integer
+ *          required: true
+ *        - in : path
+ *          name: horario_id
+ *          description: id del horario asignado a una actividad
+ *          schema: 
+ *              type: integer
+ *          required: true
+ *      responses:
+ *          200:
+ *              description: horario eliminado          
+ */
 rutaHorarios.delete("/EliminarActividadHorario/:id_actividad/:horario_id", adminController.eliminarHorarioActividad);
 
 
