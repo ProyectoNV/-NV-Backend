@@ -193,6 +193,88 @@ const eliminarHorarioActividad = async (req, res)=>{
     }
 };
 
+// ednpoints peticiones actividad 
+
+const registrarActividad = async (req, res) => {
+    console.log('endpoint')
+    try {
+        const { Nombre_actividad, anho_inicio, descripcion , foto} = req.body;
+
+        const resultado = await conn.query("INSERT INTO actividades (Nombre_actividad , anho_inicio , descripcion , foto ,Estado_actividad  ) values (?,?,?,?,?)", [Nombre_actividad, anho_inicio, descripcion, foto,1]);
+        res.json(resultado);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+const actualizarActividad = async (req, res) => {
+    const { id_actividad } = req.params;
+    const { Nombre_actividad, anho_inicio, descripcion, foto, Estado_actividad} = req.body;
+    const newData = { Nombre_actividad, anho_inicio, descripcion, foto, Estado_actividad};
+    try {
+    
+        const resultado = await conn.query("UPDATE actividades SET ? WHERE id_actividad = ?", [newData, id_actividad]);
+        res.json(resultado);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+const mostrarDatosActividad = async (req, res) => {
+    try{
+        const basedata = await conn;
+        const [datosbase] = await basedata.query("SELECT * from actividades Where Estado_actividad = 1 ");
+        res.json(datosbase)
+
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+// Eliminar Actividad
+
+const actuaActivi = async (req, res) => {
+    const { id_actividad } = req.params;
+    try {
+        const resultado = await conn.query("UPDATE actividades SET Estado_actividad = 0 WHERE id_actividad = ?", id_actividad);
+        res.json(resultado);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// ver listas 
+const verLista = async (req, res) => {  
+    try {
+        const id_actividad = req.params.id_actividad;
+        const verListact = `
+            SELECT
+                actividades.id_actividad,
+                actividades.Nombre_actividad,
+                actividades.anho_inicio,
+                actividades.descripcion,
+                usuario.id_usuario,
+                usuario.Nombres,
+                usuario.Apellidos,
+                asistencia.fecha_asistencia,
+                asistencia.Confirmacion
+            FROM
+                actividades
+            INNER JOIN
+                actividad_has_alumno ON actividades.id_actividad = actividad_has_alumno.Actividad_id
+            INNER JOIN
+                usuario ON actividad_has_alumno.id_alumno = usuario.id_usuario
+            INNER JOIN
+                asistencia ON actividades.id_actividad = asistencia.Actividad_id
+            WHERE
+                actividades.id_actividad = ?`;   
+                
+    const [resultado] = await conn.query(verListact,id_actividad)
+    res.json(resultado);
+} catch (error) {
+    res.status(500).send(error.message);
+}}
 module.exports={
     VerDocente,
     AgregarDocente,
@@ -206,5 +288,10 @@ module.exports={
     eliminarHorario,
     eliminarHorarioActividad, 
     actualizarhorario,
-    TraerCronograma
+    TraerCronograma,
+    registrarActividad,
+    actualizarActividad,
+    mostrarDatosActividad,
+    actuaActivi,
+    verLista
 }
