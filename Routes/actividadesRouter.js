@@ -129,7 +129,7 @@ rutaActivi.put('/actualizaract/:id_actividad', adminController.actuaActivi);
 
 rutaActivi.get('/verlistas/:id_actividad', adminController.verLista);
 
-
+rutaActivi.post('/insertarDocente', adminController.agregarDocenteActividad);
 
 module.exports = rutaActivi;
 

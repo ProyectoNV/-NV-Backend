@@ -228,4 +228,6 @@ rutaAlumno.put("/actualizarestado/:numero_id", AlumnoController.actualizarEstado
  */
 rutaAlumno.get("/consulta/:numero_id", AlumnoController.Consultaid);
 
+rutaAlumno.get("/RenderizadoAlumUser/:id_usuario", AlumnoController.RenderAlumUser);
+
 module.exports = rutaAlumno;

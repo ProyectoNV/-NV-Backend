@@ -143,6 +143,26 @@ const actualizarEstado = async (req, res) => {
     }
 };
 
+const RenderAlumUser = async (req, res) => {
+
+    try {
+        const {id_usuario} = req.params;
+        const connection = await conn;
+        const [[resultado]] = await connection.query(`SELECT * FROM usuario INNER JOIN alumno ON id_usuario = id_alumno WHERE id_usuario = ? `,[id_usuario])
+        if(resultado ){
+            res.json(resultado)
+        }else{
+            res.status(404).json({ message: "usuario no encontrado" });
+        }
+    }
+    catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+
+
+}
+
 
 module.exports = {
     Datos,
@@ -150,6 +170,6 @@ module.exports = {
     Datosa,
     actualizarEstado,
     actualizarAlumno,
-    Consultaid
-
+    Consultaid,
+    RenderAlumUser
 };

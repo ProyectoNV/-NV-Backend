@@ -244,6 +244,21 @@ const actuaActivi = async (req, res) => {
     }
 };
 
+const agregarDocenteActividad = async (req, res)=>{
+    try{
+        const { id_docente, Actividad_id} = req.body;
+        const valores ={id_docente, Actividad_id}
+        const connection = await conn;
+        const result = await connection.query("INSERT INTO docente_has_actividad SET ?", valores)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
+
 // ver listas 
 const verLista = async (req, res) => {  
     try {
@@ -293,5 +308,6 @@ module.exports={
     actualizarActividad,
     mostrarDatosActividad,
     actuaActivi,
-    verLista
+    verLista,
+    agregarDocenteActividad
 }
