@@ -206,7 +206,6 @@ rutaAlumno.put("/actualizaralumno", AlumnoController.actualizarAlumno);
  *         '200':
  *           description: actualizacion de estado 
  */
-
 rutaAlumno.put("/actualizarestado/:numero_id", AlumnoController.actualizarEstado);
 
 /**
@@ -228,6 +227,23 @@ rutaAlumno.put("/actualizarestado/:numero_id", AlumnoController.actualizarEstado
  */
 rutaAlumno.get("/consulta/:numero_id", AlumnoController.Consultaid);
 
+/**
+ * @swagger
+ * /RenderizadoAlumUser/{id_usuario}:
+ *  get:
+ *      summary: mostrar usuario
+ *      tags: [alumno]
+ *      parameters:
+ *        - in : path
+ *          name: id_usuario
+ *          description: id de identificacion del usuario a buscar 
+ *          schema: 
+ *              type: integer
+ *          required: true
+ *      responses:
+ *       '200':
+ *         description: infromacion del usuario con ese id
+ */
 rutaAlumno.get("/RenderizadoAlumUser/:id_usuario", AlumnoController.RenderAlumUser);
 
 module.exports = rutaAlumno;

@@ -43,6 +43,27 @@ const rutaActivi = express.Router();
 
 /**
  * @swagger
+ * components:
+ *  schemas:
+ *      actividad_Docente:
+ *          type: object
+ *          properties:
+ *              id_docente:
+ *                  type: integer
+ *                  description: Id del docente a la que se le asignara una actividad
+ *              Actividad_id:
+ *                  type: integer
+ *                  description: Id de la actividad que se le asignara a un docente
+ *          required:
+ *              - id_docente
+ *              - Actividad_id
+ *          example: 
+ *              id_docente : 16
+ *              Actividad_id : 4
+ */
+
+/**
+ * @swagger
  * /actividades/mostrar:
  *  get:
  *      summary: mostrar alumno
@@ -123,12 +144,29 @@ rutaActivi.put('/actualizar/:id_actividad', adminController.actualizarActividad 
  *       '500':
  *         description: Error interno del servidor
  */
-
-
 rutaActivi.put('/actualizaract/:id_actividad', adminController.actuaActivi);
 
 rutaActivi.get('/verlistas/:id_actividad', adminController.verLista);
 
+/**
+ * @swagger
+ * /actividades/insertarDocente:
+ *  post:
+ *      summary: Asignar una actividad a un docente existente
+ *      tags: [actividad_Docente]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                      $ref: '#/components/schemas/actividad_Docente'
+ *      responses:
+ *          200:
+ *              description: actividad asignada
+ *          500:
+ *              description: error al asignar actividad
+ */
 rutaActivi.post('/insertarDocente', adminController.agregarDocenteActividad);
 
 module.exports = rutaActivi;
