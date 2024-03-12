@@ -290,6 +290,49 @@ const verLista = async (req, res) => {
 } catch (error) {
     res.status(500).send(error.message);
 }}
+
+
+//Inscripción 
+const InscribirActividad = async (req, res)=>{
+    try{
+        const {Actividad_id, id_alumno} = req.body;
+        const valores ={ Actividad_id, id_alumno}
+        const connection = await conn;
+        const result = await connection.query("INSERT INTO actividad_has_alumno SET ?", valores)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
+const BuscarActividadesAlum = async (req, res)=>{
+    try{
+        const {id_alumno, anho_inicio} = req.params;
+        const connection = await conn;
+        const [result] = await connection.query("SELECT COUNT(*) AS cantidad_actividades FROM alumno L INNER JOIN actividad_has_alumno H ON L.id_alumno = H.id_alumno INNER JOIN actividades A  ON H.Actividad_id = A.id_actividad WHERE (H.id_alumno = ?) AND (A.anho_inicio = ?)", [id_alumno, anho_inicio])
+        res.json(result)
+    }
+    catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
+const BuscarNumAlum = async (req, res)=>{
+    try{
+        const {Actividad_id} = req.params;
+        const connection = await conn;
+        const [result] = await connection.query("SELECT COUNT(*) AS cantidad_alumnos FROM actividades A INNER JOIN actividad_has_alumno H ON A.id_actividad = H.Actividad_id INNER JOIN alumno L ON L.id_alumno = H.id_alumno WHERE H.Actividad_id = ?", Actividad_id)
+        res.json(result)
+    }
+    catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
 module.exports={
     VerDocente,
     AgregarDocente,
@@ -309,5 +352,8 @@ module.exports={
     mostrarDatosActividad,
     actuaActivi,
     verLista,
-    agregarDocenteActividad
+    agregarDocenteActividad, 
+    InscribirActividad,
+    BuscarActividadesAlum, 
+    BuscarNumAlum
 }
