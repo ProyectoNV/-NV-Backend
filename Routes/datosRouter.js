@@ -133,6 +133,8 @@ rutaDatos.get("/Informacion/usuario/:id_usuario", DocenteController.RenderInfo);
  */
 rutaDatos.put("/actilizar/InfoUser/:id_usuario", DocenteController.ActualizarInfoUser);
 
+rutaDatos.post("/preregistro",loginController.PreRegistro)
 
+rutaDatos.put("/recuperarContrasena",loginController.RecuperarContraseña)
 
 module.exports=rutaDatos;

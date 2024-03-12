@@ -161,8 +161,4 @@ AdminRutas.put("/ver_docentes/:id",AdminController.ActualizarDocente)
 
 AdminRutas.delete("/ver_docentes/:id",AdminController.EliminarDocente)
 
-AdminRutas.post("/preregistro",ingreso.PreRegistro)
-
-AdminRutas.put("/recuperarContrasena",ingreso.RecuperarContraseña)
-
 module.exports=AdminRutas;
