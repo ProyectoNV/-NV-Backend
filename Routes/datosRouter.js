@@ -1,6 +1,7 @@
 const express = require("express");
 const DocenteController =require('../Controllers/Docente/DocenteControler');
 const loginController =require('../Controllers/Ingreso');
+const preRegistroRecuperarContrasena= require('../Controllers/Preregistro_RecuperarContraseña');
 //const docenteController =require('../Controllers/Docente');
 const rutaDatos = express.Router();
 
@@ -133,8 +134,8 @@ rutaDatos.get("/Informacion/usuario/:id_usuario", DocenteController.RenderInfo);
  */
 rutaDatos.put("/actilizar/InfoUser/:id_usuario", DocenteController.ActualizarInfoUser);
 
-rutaDatos.post("/preregistro",loginController.PreRegistro)
+rutaDatos.post("/preregistro",preRegistroRecuperarContrasena.PreRegistro)
 
-rutaDatos.put("/recuperarContrasena",loginController.RecuperarContraseña)
+rutaDatos.put("/recuperarContrasena",preRegistroRecuperarContrasena.RecuperarContraseña)
 
 module.exports=rutaDatos;
