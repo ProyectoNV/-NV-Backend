@@ -136,6 +136,6 @@ rutaDatos.put("/actilizar/InfoUser/:id_usuario", DocenteController.ActualizarInf
 
 rutaDatos.post("/preregistro",preRegistroRecuperarContrasena.PreRegistro)
 
-rutaDatos.put("/recuperarContrasena",preRegistroRecuperarContrasena.RecuperarContraseña)
+rutaDatos.put("/recuperarContrasena",preRegistroRecuperarContrasena.RecuperarContrasena)
 
 module.exports=rutaDatos;
