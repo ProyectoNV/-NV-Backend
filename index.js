@@ -4,6 +4,7 @@ const bodyparser = require('body-parser')
 const datosRouter = require('./Routes/datosRouter')
 const rutaHorarios = require('./Routes/horariosRouter')
 const AdminRoutes = require('./Routes/AdminRoutes')
+const rutaDocentes = require('./Routes/DocentesRoutes')
 const rutaAlumno = require('./Routes/alumnosRouter')
 const rutaActivi = require ('./Routes/actividadesRouter')
 const cors = require('cors')
@@ -31,6 +32,7 @@ app.use("/horario", rutaHorarios);
 app.use("/admin", AdminRoutes);
 app.use("/alumno", rutaAlumno);
 app.use("/actividades", rutaActivi);
+app.use("/docente", rutaDocentes);
 
 app.get("/", (req, res)=>{
     res.send("Bienvenido a mi API conectandome a MYSQL...");
