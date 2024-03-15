@@ -71,17 +71,6 @@ const EliminarDocente = async (req,res)=>{
 };
 
 //Consultas de horario
-const mostrarOpcionesDeActividad = async (req, res)=>{
-    try{
-        const connection = await conn;
-        const [resuld] = await connection.query("SELECT id_actividad, Nombre_actividad FROM actividades");
-        res.json(resuld)
-    }catch(error){
-        res.status(500);
-        res.send(error.message);
-    }
-    
-}
 
 const filtrarActividadesHorario = async (req, res)=>{
     try{
@@ -222,9 +211,25 @@ const actualizarActividad = async (req, res) => {
 
 const mostrarDatosActividad = async (req, res) => {
     try{
+        let fechaactua = new Date();
+        let parame = fechaactua.getFullYear();
         const basedata = await conn;
-        const [datosbase] = await basedata.query("SELECT * from actividades Where Estado_actividad = 1 ");
+        const [datosbase] = await basedata.query("SELECT * from actividades WHERE (Estado_actividad = 1) AND (anho_inicio = ?)", parame);
         res.json(datosbase)
+
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+const mostrarActividadInactiva = async (req, res) => {
+    try{
+        let fechaactua = new Date();
+        let parame = fechaactua.getFullYear();
+        const basedata = await conn;
+        const [inacacti] = await basedata.query("SELECT * from actividades WHERE (Estado_actividad = 0) AND (anho_inicio = ?)", parame);
+        res.json(inacacti)
 
     }catch(error){
         res.status(500);
@@ -236,8 +241,17 @@ const mostrarDatosActividad = async (req, res) => {
 
 const actuaActivi = async (req, res) => {
     const { id_actividad } = req.params;
+    const consulta="SELECT Estado_actividad FROM actividades WHERE id_actividad = ?";
+    const [verificarEstado] = await conn.query(consulta, id_actividad);
+    let cambio = 1;
+    if(verificarEstado[0].Estado_actividad === 1){
+        cambio = 0;
+    }
+    else if(verificarEstado[0].Estado_actividad === 0){
+        cambio = 1;
+    }
     try {
-        const resultado = await conn.query("UPDATE actividades SET Estado_actividad = 0 WHERE id_actividad = ?", id_actividad);
+        const resultado = await conn.query("UPDATE actividades SET Estado_actividad = ? WHERE id_actividad = ?", [cambio, id_actividad]);
         res.json(resultado);
     } catch (error) {
         res.status(500).send(error.message);
@@ -339,7 +353,7 @@ module.exports={
     ActualizarDocente,
     EliminarDocente,
     agregarHorario,
-    mostrarOpcionesDeActividad,
+    mostrarActividadInactiva,
     agregarHorarioActividad,
     filtrarActividadesHorario,
     buscarHorariosIguales,

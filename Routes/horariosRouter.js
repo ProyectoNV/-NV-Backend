@@ -216,8 +216,6 @@ rutaHorarios.put("/actualizarHorario/:id_horario", adminController.actualizarhor
  */
 rutaHorarios.post("/agregarHorariosActividad", adminController.agregarHorarioActividad);
 
-rutaHorarios.get("/opsionesActividad", adminController.mostrarOpcionesDeActividad);
-
 /**
  * @swagger
  * /horario/VerCronograma/{Dia_semana}:

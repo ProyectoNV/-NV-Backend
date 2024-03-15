@@ -66,13 +66,25 @@ const rutaActivi = express.Router();
  * @swagger
  * /actividades/mostrar:
  *  get:
- *      summary: mostrar alumno
+ *      summary: mostrar actividades activas
  *      tags: [actividad]
  *      responses:
  *       '200':
  *         description: informacion de los alumnos
  */
 rutaActivi.get('/mostrar', adminController.mostrarDatosActividad);
+
+/**
+ * @swagger
+ * /actividades/mostrarInactivas:
+ *  get:
+ *      summary: mostrar actividades inactivas
+ *      tags: [actividad]
+ *      responses:
+ *       '200':
+ *         description: informacion de los alumnos
+ */
+rutaActivi.get('/mostrarInactivas', adminController.mostrarActividadInactiva);
 
 
 
