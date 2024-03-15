@@ -59,13 +59,18 @@ const rutaDocentes=express.Router()
 
 /**
  * @swagger
- * /docente/listado:
+ * /docente/listado/{Actividad_id}:
  *  get:
  *      summary: Mostrar los alumnos de esa actividad
  *      tags: [Puntos]
+ *      parameters:
+ *        - in : path
+ *          name: Actividad_id
+ *          description: numero de identificacion de la actividad 
+ *          schema: 
  *      responses:
  *       '200':
- *         description: Informacion de los ualumnos en cada actividad
+ *         description: Informacion de los alumnos en cada actividad
  */
 rutaDocentes.get("/listado/:Actividad_id", DocenteControler.Listado);
 
@@ -119,6 +124,21 @@ rutaDocentes.post("/puntos", DocenteControler.agregarPuntos);
  */
 rutaDocentes.post("/observaciones", DocenteControler.agregarObservaciones);
 
+/**
+ * @swagger
+ * /docente/docenteactividad/{id_docente}:
+ *  get:
+ *      summary: Mostrar los alumnos de esa actividad
+ *      tags: [Puntos]
+ *      parameters:
+ *        - in : path
+ *          name: id_docente
+ *          description: numero de identificacion del docente 
+ *          schema: 
+ *      responses:
+ *       '200':
+ *         description: Informacion del id del docente
+ */
 rutaDocentes.get("/docenteactividad/:id_docente", DocenteControler.DocenteActividad);
 
 

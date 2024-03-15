@@ -35,7 +35,7 @@ const ActualizarInfoUser = async (req, res) => {
 const Listado = async (req, res) => {
 
     try {
-        const{Actividad_id}=req.params;
+        const{Actividad_id} =req.params;
 
         const query = `SELECT alu.id_alumno, u.id_usuario, u.Nombres, u.Apellidos
         FROM usuario u
@@ -102,9 +102,11 @@ const agregarObservaciones= async (req, res)=>{
 const DocenteActividad = async (req, res)=>{
     try{
         const{id_docente}=req.params;
-
+        console.log(id_docente)
         const connection = await conn;
-        const [result] = await connection.query("SELECT * FROM docente_has_actividad  WHERE id_docente = ?",id_docente)
+        const [result] = await connection.query(`SELECT * FROM docente_has_actividad  
+        INNER JOIN actividades acti ON acti.id_actividad = docente_has_actividad.Actividad_id WHERE id_docente = ?`,id_docente)
+        console.log(result)
         res.json(result)
     }
     catch(error){
