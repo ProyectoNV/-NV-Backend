@@ -161,4 +161,7 @@ AdminRutas.put("/ver_docentes/:id",AdminController.ActualizarDocente)
 
 AdminRutas.delete("/ver_docentes/:id",AdminController.EliminarDocente)
 
+
+AdminRutas.get("/verCantidades",AdminController.BuscarCantidad)
+
 module.exports=AdminRutas;

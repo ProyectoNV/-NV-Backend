@@ -347,6 +347,34 @@ const BuscarNumAlum = async (req, res)=>{
     }
 };
 
+const BuscarCantidad = async (req, res)=>{
+    try{
+        const connection = await conn;
+        const [Nalumnos] = await connection.query("SELECT COUNT(*) AS cantidad_alumnos FROM usuario WHERE (id_rol = 12) AND (estado = 1)")
+        const [Nadmi] = await connection.query("SELECT COUNT(*) AS cantidad_administrador FROM usuario WHERE (id_rol = 10) AND (estado = 1)")
+        const [NaDoc] = await connection.query("SELECT COUNT(*) AS cantidad_docente FROM usuario WHERE (id_rol = 11) AND (estado = 1)")
+        const [Nact] = await connection.query("SELECT COUNT(*) AS cantidad_actividades FROM actividades WHERE Estado_actividad = 1")
+        
+        const cantidadAlumnos = Nalumnos[0].cantidad_alumnos;
+        const cantidadDocentes = NaDoc[0].cantidad_docente;
+        const cantidadAdministradores = Nadmi[0].cantidad_administrador;
+        const cantidadActividades = Nact[0].cantidad_actividades;
+
+        res.json({
+            Cantidad_alumnos: cantidadAlumnos,
+            Cantidad_docente: cantidadDocentes,
+            Cantidad_administrador: cantidadAdministradores,
+            Cantidad_actividades: cantidadActividades
+        })
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+};
+
+//Renderizado cantidad
+
+
 module.exports={
     VerDocente,
     AgregarDocente,
@@ -369,5 +397,6 @@ module.exports={
     agregarDocenteActividad, 
     InscribirActividad,
     BuscarActividadesAlum, 
-    BuscarNumAlum
+    BuscarNumAlum, 
+    BuscarCantidad
 }
