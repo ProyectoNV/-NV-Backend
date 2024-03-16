@@ -159,10 +159,59 @@ const RenderAlumUser = async (req, res) => {
         res.status(500);
         res.send(error.message);
     }
-
-
 }
 
+const verActividadesAlum = async (req, res) => {  
+    try {
+        const id_alumno = req.params.id_alumno;
+        const verListact = `
+        SELECT 
+    actividades.id_actividad,
+    actividades.Nombre_actividad,
+    actividades.anho_inicio,
+    actividades.descripcion,
+    usuario.id_usuario AS id_alumno,
+    usuario.Nombres AS nombres_alumno,
+    usuario.Apellidos AS apellidos_alumno,
+    usuario_docente.id_usuario AS id_docente,
+    usuario_docente.Nombres AS nombres_docente,
+    usuario_docente.Apellidos AS apellidos_docente,
+    SUM(asistencia.Confirmacion) AS asistencias,
+    COUNT(asistencia.Confirmacion) AS clases
+FROM 
+    asistencia
+LEFT JOIN 
+    actividad_has_alumno ON asistencia.Actividad_id = actividad_has_alumno.Actividad_id AND asistencia.id_alumno = actividad_has_alumno.id_alumno
+INNER JOIN 
+    actividades ON actividad_has_alumno.Actividad_id = actividades.id_actividad
+INNER JOIN 
+    alumno ON actividad_has_alumno.id_alumno = alumno.id_alumno
+LEFT JOIN 
+    usuario ON usuario.id_usuario = alumno.id_alumno
+LEFT JOIN 
+    docente_has_actividad ON actividades.id_actividad = docente_has_actividad.Actividad_id
+LEFT JOIN 
+    usuario AS usuario_docente ON usuario_docente.id_usuario = docente_has_actividad.id_docente
+WHERE 
+    actividad_has_alumno.id_alumno = ?
+GROUP BY 
+    actividades.id_actividad,
+    actividades.Nombre_actividad,
+    actividades.anho_inicio,
+    actividades.descripcion,
+    usuario.id_usuario,
+    usuario.Nombres,
+    usuario.Apellidos,
+    usuario_docente.id_usuario,
+    usuario_docente.Nombres,
+    usuario_docente.Apellidos;
+        `; 
+                
+    const [resultado] = await conn.query(verListact,id_alumno)
+    res.json(resultado);
+} catch (error) {
+    res.status(500).send(error.message);
+}}
 
 module.exports = {
     Datos,
@@ -171,5 +220,6 @@ module.exports = {
     actualizarEstado,
     actualizarAlumno,
     Consultaid,
-    RenderAlumUser
+    RenderAlumUser,
+    verActividadesAlum
 };

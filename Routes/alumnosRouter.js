@@ -246,4 +246,6 @@ rutaAlumno.get("/consulta/:numero_id", AlumnoController.Consultaid);
  */
 rutaAlumno.get("/RenderizadoAlumUser/:id_usuario", AlumnoController.RenderAlumUser);
 
+rutaAlumno.get("/ActividadesAlumno/:id_alumno", AlumnoController.verActividadesAlum);
+
 module.exports = rutaAlumno;
