@@ -140,6 +140,26 @@ rutaDocentes.post("/observaciones", DocenteControler.agregarObservaciones);
  *         description: Informacion del id del docente
  */
 rutaDocentes.get("/docenteactividad/:id_docente", DocenteControler.DocenteActividad);
+/**
+ * @swagger
+ * /docente/verpuntos/{Actividad_id}:
+ *  get:
+ *      summary: Mostrar puntos, observaciones y total de asistencias
+ *      tags: [Puntos]
+ *      parameters:
+ *        - in : path
+ *          name: id_docente
+ *          description: Puntos, observaciones y aistencias
+ *          schema: 
+ *      responses:
+ *       '200':
+ *         description: Informacion general de los alumnos 
+ */
+
+rutaDocentes.get("/verpuntos/:Actividad_id", DocenteControler.verPuntos);
+
+
+
 rutaDocentes.post('/registrarasistencia',DocenteControler.registrarAsistencia);
 
 

@@ -146,8 +146,53 @@ const registrarAsistencia = async (req, res) => {
         console.error(error);
     } }
 
+    const verPuntos = async (req, res) => {
+
+        try {
+            const { Actividad_id } = req.params;
+            console.log(Actividad_id)
+            const query = `
+            SELECT
+        a.id_alumno,
+        u.Nombres AS nombre_alumno,
+        u.Apellidos AS apellido_alumno,
+        COUNT(DISTINCT asis.id_asistencia) AS total_asistencias,
+        SUM(puntos.valor_puntos) AS total_puntos,
+        COUNT(DISTINCT obs.id_observacion) AS total_observaciones
+    FROM
+        alumno a
+    LEFT JOIN
+        usuario u ON a.id_alumno = u.id_usuario
+    LEFT JOIN
+        actividad_has_alumno AS act_alum ON a.id_alumno = act_alum.id_alumno
+    LEFT JOIN
+        asistencia AS asis ON act_alum.Actividad_id = asis.Actividad_id AND a.id_alumno = asis.id_alumno
+    LEFT JOIN
+        puntos_por_actividad AS ppa ON act_alum.Actividad_id = ppa.id_actividad AND a.id_alumno = ppa.id_alumno
+    LEFT JOIN
+        puntos ON ppa.puntos_id = puntos.id_puntos
+    LEFT JOIN
+        observaciones AS obs ON act_alum.Actividad_id = obs.Actividad_id AND a.id_alumno = obs.id_alumno
+    LEFT JOIN
+        actividades AS act ON act_alum.Actividad_id = act.id_actividad
+    WHERE
+        act_alum.Actividad_id = 1
+    GROUP BY
+        a.id_alumno, u.Nombres, u.Apellidos;
+            `;
+            const [resultado] = await conn.query(query, [Actividad_id]);
+            res.json(resultado);
+        } catch (error) {
+            res.status(500);
+            res.send(error.message);
+        }
+    
+    }
+    
+
 module.exports = {
     agregarPuntos,
+    verPuntos,
     DocenteActividad,
     agregarObservaciones,
     Listado,
