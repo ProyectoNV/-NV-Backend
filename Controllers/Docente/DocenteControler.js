@@ -115,6 +115,37 @@ const DocenteActividad = async (req, res)=>{
     }
 };
 
+/*const llenarAsisten = async (req, res) => {
+    try {
+        const asisten = `
+        SELECT a.id_alumno, u.Nombres, u.Apellidos
+        FROM usuario u
+        INNER JOIN alumno a ON u.id_usuario = a.id_alumno
+        INNER JOIN actividad_has_alumno aha ON aha.id_alumno = a.id_alumno
+        WHERE aha.Actividad_id = ?`;
+
+        const [rows] = await conn.query(asisten,[req.params.actividad_id]);
+
+        res.json(rows);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+}
+ */
+const registrarAsistencia = async (req, res) => {
+    try {
+        const { Actividad_id, id_alumno, fecha_asistencia, Confirmacion } = req.body;
+        const asistencia = { Actividad_id, id_alumno, fecha_asistencia, Confirmacion };
+
+        const connection = await conn;
+        const result = await connection.query("INSERT INTO asistencia SET ?", asistencia);
+    
+        res.json(result);
+    } catch (error) {
+        res.status(500).send(error.message);
+        console.error(error);
+    } }
+
 module.exports = {
     agregarPuntos,
     DocenteActividad,
@@ -122,5 +153,6 @@ module.exports = {
     Listado,
     RenderInfo,
     Puntos,
-    ActualizarInfoUser
+    ActualizarInfoUser,
+    registrarAsistencia
 }

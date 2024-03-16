@@ -140,6 +140,7 @@ rutaDocentes.post("/observaciones", DocenteControler.agregarObservaciones);
  *         description: Informacion del id del docente
  */
 rutaDocentes.get("/docenteactividad/:id_docente", DocenteControler.DocenteActividad);
+rutaDocentes.post('/registrarasistencia',DocenteControler.registrarAsistencia);
 
 
 module.exports=rutaDocentes;

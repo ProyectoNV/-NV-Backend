@@ -278,26 +278,37 @@ const verLista = async (req, res) => {
     try {
         const id_actividad = req.params.id_actividad;
         const verListact = `
-            SELECT
-                actividades.id_actividad,
-                actividades.Nombre_actividad,
-                actividades.anho_inicio,
-                actividades.descripcion,
-                usuario.id_usuario,
-                usuario.Nombres,
-                usuario.Apellidos,
-                asistencia.fecha_asistencia,
-                asistencia.Confirmacion
-            FROM
-                actividades
-            INNER JOIN
-                actividad_has_alumno ON actividades.id_actividad = actividad_has_alumno.Actividad_id
-            INNER JOIN
-                usuario ON actividad_has_alumno.id_alumno = usuario.id_usuario
-            INNER JOIN
-                asistencia ON actividades.id_actividad = asistencia.Actividad_id
-            WHERE
-                actividades.id_actividad = ?`;   
+        SELECT 
+        actividades.id_actividad,
+        actividades.Nombre_actividad,
+        actividades.anho_inicio,
+        actividades.descripcion,
+        usuario.id_usuario,
+        usuario.Nombres,
+        usuario.Apellidos,
+        SUM(asistencia.Confirmacion) AS asistencias,
+        COUNT(asistencia.Confirmacion) AS clases
+    FROM 
+        asistencia
+    LEFT JOIN 
+        actividad_has_alumno ON asistencia.Actividad_id = actividad_has_alumno.Actividad_id AND asistencia.id_alumno = actividad_has_alumno.id_alumno
+    INNER JOIN 
+        actividades ON actividad_has_alumno.Actividad_id = actividades.id_actividad
+    INNER JOIN 
+        alumno ON actividad_has_alumno.id_alumno = alumno.id_alumno
+    LEFT JOIN 
+        usuario ON usuario.id_usuario = alumno.id_alumno
+    WHERE 
+        actividades.id_actividad = ?
+    GROUP BY 
+        actividades.id_actividad,
+        actividades.Nombre_actividad,
+        actividades.anho_inicio,
+        actividades.descripcion,
+        usuario.id_usuario,
+        usuario.Nombres,
+        usuario.Apellidos
+        `; 
                 
     const [resultado] = await conn.query(verListact,id_actividad)
     res.json(resultado);
