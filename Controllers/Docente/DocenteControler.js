@@ -176,7 +176,7 @@ const registrarAsistencia = async (req, res) => {
     LEFT JOIN
         actividades AS act ON act_alum.Actividad_id = act.id_actividad
     WHERE
-        act_alum.Actividad_id = 1
+        act_alum.Actividad_id = ?
     GROUP BY
         a.id_alumno, u.Nombres, u.Apellidos;
             `;
