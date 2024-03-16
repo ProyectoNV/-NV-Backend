@@ -86,8 +86,8 @@ const filtrarActividadesHorario = async (req, res)=>{
 
 const agregarHorario = async (req, res)=>{
     try{
-        const {Dia_semana, Hora_inicio, Hora_fin, Lugar} = req.body;
-        const valores ={Dia_semana, Hora_inicio, Hora_fin, Lugar}
+        const {Dia_semana, Hora_inicio, Hora_fin, Lugar, estado} = req.body;
+        const valores ={Dia_semana, Hora_inicio, Hora_fin, Lugar, estado}
         const connection = await conn;
         const result = await connection.query("INSERT INTO  horario SET ?", valores)
         res.json(result)
