@@ -21,15 +21,20 @@ const AgregarDocente = async(req,res)=>{
             res.send("Todos los campos son obligatorios")
             return
         }
-        const contraEncriptada = await bcryp.hash(numeroId,3);
+        
         const consulta="SELECT * FROM usuario WHERE pkfk_tdoc = ? AND numero_id = ?";
         const [verificarUsuario] = await conn.query(consulta, [tipoDoc, numeroId]);
 
+        console.log(req.body)
         console.log(verificarUsuario.length)
+        const contraEncriptada = await bcryp.hash(numeroId,5);
         if (verificarUsuario.length ===0){
             const respuesta = await conn.query('INSERT INTO usuario (pkfk_tdoc,numero_id,id_rol,Nombres,Apellidos,fecha_nacimiento,genero,correo,celular,contrasena,estado) VALUES (?,?,?,?,?,?,?,?,?,?,?)',[tipoDoc,numeroId,11,nombres,apellidos,fechaNacimiento,genero,correo,celular,contraEncriptada,1])
             console.log(respuesta)
             res.json({message:"Usuario y docente creado correctamente"})
+        }else{
+            console.log("Ya existe un usuario")
+            res.json({message:"Ya hay un usuario registrado "})
         }
     } catch (error) {
         console.error("Error al agregar al profesor :",error)
@@ -385,6 +390,48 @@ const BuscarCantidad = async (req, res)=>{
 
 //Renderizado cantidad
 
+//Funcion para traer todos los datos de un alumno para un reporte
+
+const reporteEstudiante = async (req,res)=>{
+    try {
+        const {numero_id} = req.body
+        console.log(numero_id)
+        const existeAlumno= "SELECT * FROM usuario where numero_id = ?;"
+
+        const [resultado] = await conn.query(existeAlumno,[numero_id])
+
+        if(resultado.length> 0){
+            console.log("entrreeeeee")
+            const [row] = await conn.query("SELECT id_usuario FROM usuario WHERE numero_id = ?", [numero_id]);
+            const id_alumno = row[0].id_usuario;
+            
+            const mostrarDatosEstudiante = `SELECT 
+            u.Nombres,
+            u.Apellidos,
+            act.Nombre_actividad,
+            obs.fecha_observacion,
+            obs.descripcion_observacion,
+            (SELECT COUNT(*) FROM asistencia WHERE Confirmacion = 0 AND id_alumno = ?) AS Inasistencias,
+            (SELECT SUM(p.valor_puntos) FROM puntos_por_actividad ppa JOIN puntos p ON p.id_puntos = ppa.puntos_id WHERE id_alumno = ?) AS Puntos_Totales
+            FROM usuario u
+            JOIN alumno a ON u.id_usuario = a.id_alumno
+            JOIN actividad_has_alumno aha ON a.id_alumno = aha.id_alumno
+            JOIN actividades act ON aha.Actividad_id = act.id_actividad
+            JOIN observaciones obs ON aha.id_alumno = obs.id_alumno 
+            WHERE aha.id_alumno = ?;`
+
+            const [resultadoDatosEstudiante] = await conn.query(mostrarDatosEstudiante,[id_alumno,id_alumno,id_alumno])
+            
+            console.log(resultadoDatosEstudiante)
+            res.json(resultadoDatosEstudiante)
+        }else{
+            console.log("No hay ningun alumno con ese numero de documento")
+            res.json({message:"No se encontro ningun alumno"})
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 module.exports={
     VerDocente,
@@ -409,5 +456,6 @@ module.exports={
     InscribirActividad,
     BuscarActividadesAlum, 
     BuscarNumAlum, 
-    BuscarCantidad
+    BuscarCantidad,
+    reporteEstudiante
 }
