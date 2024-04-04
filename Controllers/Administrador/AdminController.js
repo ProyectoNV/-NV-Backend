@@ -396,7 +396,8 @@ const reporteEstudiante = async (req,res)=>{
     try {
         const {numero_id} = req.body
         console.log(numero_id)
-        const existeAlumno= "SELECT * FROM usuario where numero_id = ?;"
+        console.log(req.body)
+        const existeAlumno= "SELECT * FROM usuario where numero_id = ? and id_rol=12;"
 
         const [resultado] = await conn.query(existeAlumno,[numero_id])
 
@@ -406,6 +407,7 @@ const reporteEstudiante = async (req,res)=>{
             const id_alumno = row[0].id_usuario;
             
             const mostrarDatosEstudiante = `SELECT 
+            a.id_alumno,
             u.Nombres,
             u.Apellidos,
             act.Nombre_actividad,
