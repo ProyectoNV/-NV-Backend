@@ -277,6 +277,18 @@ const agregarDocenteActividad = async (req, res)=>{
     }
 };
 
+const BuscarActivity = async (req, res)=>{
+    try{
+        const id_actividad = req.params.id_actividad
+        const basedata = await conn;
+        const [datosbase] = await basedata.query("SELECT * from actividades WHERE id_actividad = ?", id_actividad);
+        res.json(datosbase)
+
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+};
 
 // ver listas 
 const verLista = async (req, res) => {  
@@ -457,5 +469,6 @@ module.exports={
     BuscarActividadesAlum, 
     BuscarNumAlum, 
     BuscarCantidad,
-    reporteEstudiante
+    reporteEstudiante,
+    BuscarActivity
 }
