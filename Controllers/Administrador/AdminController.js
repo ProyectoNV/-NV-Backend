@@ -419,22 +419,24 @@ const reporteEstudiante = async (req,res)=>{
             const id_alumno = row[0].id_usuario;
             
             const mostrarDatosEstudiante = `SELECT 
-            a.id_alumno,
             u.Nombres,
             u.Apellidos,
             act.Nombre_actividad,
             obs.fecha_observacion,
             obs.descripcion_observacion,
-            (SELECT COUNT(*) FROM asistencia WHERE Confirmacion = 0 AND id_alumno = ?) AS Inasistencias,
-            (SELECT SUM(p.valor_puntos) FROM puntos_por_actividad ppa JOIN puntos p ON p.id_puntos = ppa.puntos_id WHERE id_alumno = ?) AS Puntos_Totales
+            (SELECT COUNT(*) FROM asistencia WHERE Confirmacion = 0 AND id_alumno = a.id_alumno) AS Inasistencias,
+            (SELECT SUM(p.valor_puntos) 
+             FROM puntos_por_actividad ppa 
+             JOIN puntos p ON p.id_puntos = ppa.puntos_id 
+             WHERE ppa.id_alumno = a.id_alumno AND ppa.id_actividad = act.id_actividad) AS Puntos_Totales
             FROM usuario u
             JOIN alumno a ON u.id_usuario = a.id_alumno
             JOIN actividad_has_alumno aha ON a.id_alumno = aha.id_alumno
             JOIN actividades act ON aha.Actividad_id = act.id_actividad
-            JOIN observaciones obs ON aha.id_alumno = obs.id_alumno 
+            JOIN observaciones obs ON aha.id_alumno = obs.id_alumno AND act.id_actividad = obs.Actividad_id
             WHERE aha.id_alumno = ?;`
 
-            const [resultadoDatosEstudiante] = await conn.query(mostrarDatosEstudiante,[id_alumno,id_alumno,id_alumno])
+            const [resultadoDatosEstudiante] = await conn.query(mostrarDatosEstudiante,[id_alumno])
             
             console.log(resultadoDatosEstudiante)
             res.json(resultadoDatosEstudiante)
