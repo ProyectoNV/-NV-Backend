@@ -404,50 +404,62 @@ const BuscarCantidad = async (req, res)=>{
 
 //Funcion para traer todos los datos de un alumno para un reporte
 
-const reporteEstudiante = async (req,res)=>{
+const reporteEstudiante = async (req, res) => {
     try {
-        const {numero_id} = req.body
-        console.log(numero_id)
-        console.log(req.body)
-        const existeAlumno= "SELECT * FROM usuario where numero_id = ? and id_rol=12;"
+        const { numero_id } = req.body;
+        console.log(numero_id);
+        console.log(req.body);
+        const existeAlumno = "SELECT * FROM usuario WHERE numero_id = ? AND id_rol = 12;";
 
-        const [resultado] = await conn.query(existeAlumno,[numero_id])
+        const [resultado] = await conn.query(existeAlumno, [numero_id]);
 
-        if(resultado.length> 0){
-            console.log("entrreeeeee")
-            const [row] = await conn.query("SELECT id_usuario FROM usuario WHERE numero_id = ?", [numero_id]);
+        if (resultado.length > 0) {
+            console.log("entrreeeeee");
+            const [row] = await conn.query("SELECT id_usuario, Nombres, Apellidos FROM usuario WHERE numero_id = ?", [numero_id]);
             const id_alumno = row[0].id_usuario;
-            
-            const mostrarDatosEstudiante = `SELECT 
-            u.Nombres,
-            u.Apellidos,
-            act.Nombre_actividad,
-            obs.fecha_observacion,
-            obs.descripcion_observacion,
-            (SELECT COUNT(*) FROM asistencia WHERE Confirmacion = 0 AND id_alumno = a.id_alumno) AS Inasistencias,
-            (SELECT SUM(p.valor_puntos) 
-             FROM puntos_por_actividad ppa 
-             JOIN puntos p ON p.id_puntos = ppa.puntos_id 
-             WHERE ppa.id_alumno = a.id_alumno AND ppa.id_actividad = act.id_actividad) AS Puntos_Totales
-            FROM usuario u
-            JOIN alumno a ON u.id_usuario = a.id_alumno
-            JOIN actividad_has_alumno aha ON a.id_alumno = aha.id_alumno
-            JOIN actividades act ON aha.Actividad_id = act.id_actividad
-            JOIN observaciones obs ON aha.id_alumno = obs.id_alumno AND act.id_actividad = obs.Actividad_id
-            WHERE aha.id_alumno = ?;`
+            const Nombre = row[0].Nombres;
+            const Apellido = row[0].Apellidos;
 
-            const [resultadoDatosEstudiante] = await conn.query(mostrarDatosEstudiante,[id_alumno])
-            
-            console.log(resultadoDatosEstudiante)
-            res.json(resultadoDatosEstudiante)
-        }else{
-            console.log("No hay ningun alumno con ese numero de documento")
-            res.json({message:"No se encontro ningun alumno"})
+            const mostrarDatosEstudiante = `
+                SELECT
+                    COALESCE(obs.fecha_observacion, '') AS fecha_observacion,
+                    COALESCE(obs.descripcion_observacion, '') AS descripcion_observacion,
+                    COALESCE(act.Nombre_actividad, '') AS Nombre_actividad,
+                    COALESCE((SELECT COUNT(*) FROM asistencia ast WHERE Confirmacion = 0 AND ast.id_alumno = a.id_alumno AND ast.Actividad_id = act.id_actividad), 0) AS Inasistencias,
+                    COALESCE((SELECT SUM(p.valor_puntos) FROM puntos_por_actividad ppa JOIN puntos p ON p.id_puntos = ppa.puntos_id WHERE ppa.id_alumno = a.id_alumno AND ppa.id_actividad = act.id_actividad), 0) AS Puntos_Totales,
+                    (SELECT GROUP_CONCAT(DISTINCT Nombre_actividad SEPARATOR ', ')
+                     FROM actividades ac
+                     JOIN actividad_has_alumno aha ON ac.id_actividad = aha.Actividad_id
+                     WHERE aha.id_alumno = a.id_alumno) AS Actividades_Inscritas
+                FROM
+                    usuario u
+                    JOIN alumno a ON u.id_usuario = a.id_alumno
+                    LEFT JOIN actividad_has_alumno aha ON a.id_alumno = aha.id_alumno
+                    LEFT JOIN actividades act ON aha.Actividad_id = act.id_actividad
+                    LEFT JOIN observaciones obs ON aha.id_alumno = obs.id_alumno AND act.id_actividad = obs.Actividad_id
+                WHERE
+                    a.id_alumno = ?;`;
+
+            const [resultadoDatosEstudiante] = await conn.query(mostrarDatosEstudiante, [id_alumno]);
+
+            const datosJson={
+                Nombre,
+                Apellido,
+                resultadoDatosEstudiante
+            }
+
+            console.log(datosJson);
+            res.json(datosJson);
+        } else {
+            console.log("No hay ningun alumno con ese numero de documento");
+            res.json({ message: "No se encontro ningun alumno", success: "false" });
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        res.status(500).json({ error: "Error en el servidor" });
     }
-}
+};
+
 
 module.exports={
     VerDocente,
