@@ -157,10 +157,27 @@ rutaDocentes.get("/docenteactividad/:id_docente", DocenteControler.DocenteActivi
  */
 
 rutaDocentes.get("/verpuntos/:Actividad_id", DocenteControler.verPuntos);
+/**
+ * @swagger
+ * /docente/verpuntos/{Actividad_id}:
+ *  get:
+ *      summary: Mostrar puntos, observaciones y total de asistencias
+ *      tags: [Puntos]
+ *      parameters:
+ *        - in : path
+ *          name: id_docente
+ *          description: Puntos, observaciones y aistencias
+ *          schema: 
+ *      responses:
+ *       '200':
+ *         description: Informacion general de los alumnos 
+ */
 
 
 
 rutaDocentes.post('/registrarasistencia',DocenteControler.registrarAsistencia);
+
+
 
 
 module.exports=rutaDocentes;
