@@ -265,6 +265,7 @@ rutaActivi.post('/insertarDocente', adminController.agregarDocenteActividad);
 rutaActivi.post('/Inscribirse', adminController.InscribirActividad);
 rutaActivi.get('/BuscarActividadesAlumno/:id_alumno/:anho_inicio', adminController.BuscarActividadesAlum);
 rutaActivi.get('/BuscarAlumnosActi/:Actividad_id', adminController.BuscarNumAlum);
+rutaActivi.get('/BuscarInfoActivity/:id_actividad', adminController.BuscarActivity);
 
 module.exports = rutaActivi;
 
