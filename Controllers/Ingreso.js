@@ -87,8 +87,59 @@ function ObtenerUsuariosPendientes(req, res) {
     });
 }
 
+function AceptarUsuario(req, res) {
+    const { id_usuario } = req.params;
+    const estadoActivo = 1;
+
+    const query = `
+        UPDATE usuario 
+        SET estado = ? 
+        WHERE id_usuario = ?
+    `;
+
+    conn.query(query, [estadoActivo, id_usuario], (error, results) => {
+        if (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al aceptar el usuario',
+                error: error
+            });
+        }
+        
+        res.json({
+            success: true,
+            message: 'Usuario aceptado con éxito',
+        });
+    });
+}
+
+function RechazarUsuario(req, res) {
+    const { id_usuario } = req.params;
+
+    const query = `
+        DELETE FROM usuario 
+        WHERE id_usuario = ?
+    `;
+
+    conn.query(query, [id_usuario], (error, results) => {
+        if (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al rechazar el usuario',
+                error: error
+            });
+        }
+        
+        res.json({
+            success: true,
+            message: 'Usuario rechazado y eliminado con éxito',
+        });
+    });
+}
 
 module.exports = {
     IniciarSesion,
-    ObtenerUsuariosPendientes
+    ObtenerUsuariosPendientes,
+    AceptarUsuario,
+    RechazarUsuario
 };

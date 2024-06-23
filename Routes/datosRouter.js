@@ -140,4 +140,9 @@ rutaDatos.put("/recuperarContrasena",preRegistroRecuperarContrasena.RecuperarCon
 
 rutaDatos.get("/solicitudes", loginController.ObtenerUsuariosPendientes);
 
+rutaDatos.put('/solicitudesaceptar/:id_usuario', loginController.AceptarUsuario);
+
+rutaDatos.delete('/solicitudesrechazar/:id_usuario', loginController.RechazarUsuario);
+
+
 module.exports=rutaDatos;
