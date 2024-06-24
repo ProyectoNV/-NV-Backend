@@ -224,7 +224,7 @@ const mostrarDatosActividad = async (req, res) => {
 }
 
 const mostrarActividadInactiva = async (req, res) => {
-    try{
+     try{
         let fechaactua = new Date();
         let parame = fechaactua.getFullYear();
         const basedata = await conn;
