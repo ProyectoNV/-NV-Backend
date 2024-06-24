@@ -139,7 +139,7 @@ rutaActivi.put('/actualizar/:id_actividad', adminController.actualizarActividad 
 
 /**
  * @swagger
- * /actividades/actualizaract/{id_actividad}:
+ * /actividades/actualizar/{id_actividad}:
  *   put:
  *     summary: Actualizar estado actividad
  *     tags: [actividad]
@@ -157,8 +157,88 @@ rutaActivi.put('/actualizar/:id_actividad', adminController.actualizarActividad 
  *         description: Error interno del servidor
  */
 rutaActivi.put('/actualizaract/:id_actividad', adminController.actuaActivi);
+/**
+ * @swagger
+ * /actividades/actualizaract/{id_actividad}:
+ *   put:
+ *     summary: Actualizar estado de una actividad (1 para activo, 0 para inactivo)
+ *     tags: [actividad]
+ *     parameters:
+ *       - name: id_actividad
+ *         in: path
+ *         description: El ID de la actividad que se va a actualizar
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operación exitosa. Devuelve el resultado de la actualización.
+ *       '500':
+ *         description: Error interno del servidor. Devuelve un mensaje de error.
+ */
+
+
+
+
 
 rutaActivi.get('/verlistas/:id_actividad', adminController.verLista);
+
+/**
+ * @swagger
+ * /actividades/verlistas/{id_actividad}:
+ *   get:
+ *     summary: Ver lista de asistencia de una actividad
+ *     tags: [actividad]
+ *     parameters:
+ *       - name: id_actividad
+ *         in: path
+ *         description: El ID de la actividad para la cual se desea ver la lista de asistencia
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Operación exitosa. Devuelve la lista de asistencia de la actividad especificada.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_actividad:
+ *                     type: integer
+ *                     description: ID de la actividad.
+ *                   Nombre_actividad:
+ *                     type: string
+ *                     description: Nombre de la actividad.
+ *                   anho_inicio:
+ *                     type: integer
+ *                     description: Año de inicio de la actividad.
+ *                   descripcion:
+ *                     type: string
+ *                     description: Descripción de la actividad.
+ *                   id_usuario:
+ *                     type: integer
+ *                     description: ID del usuario.
+ *                   Nombres:
+ *                     type: string
+ *                     description: Nombres del usuario.
+ *                   Apellidos:
+ *                     type: string
+ *                     description: Apellidos del usuario.
+ *                   asistencias:
+ *                     type: integer
+ *                     description: Cantidad de asistencias.
+ *                   clases:
+ *                     type: integer
+ *                     description: Cantidad de clases.
+ *       '500':
+ *         description: Error 
+ */
+
+
+
 
 /**
  * @swagger
@@ -185,6 +265,7 @@ rutaActivi.post('/insertarDocente', adminController.agregarDocenteActividad);
 rutaActivi.post('/Inscribirse', adminController.InscribirActividad);
 rutaActivi.get('/BuscarActividadesAlumno/:id_alumno/:anho_inicio', adminController.BuscarActividadesAlum);
 rutaActivi.get('/BuscarAlumnosActi/:Actividad_id', adminController.BuscarNumAlum);
+rutaActivi.get('/BuscarInfoActivity/:id_actividad', adminController.BuscarActivity);
 
 module.exports = rutaActivi;
 

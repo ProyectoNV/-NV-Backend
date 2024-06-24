@@ -1,0 +1,50 @@
+ ###
+
+POST  http://localhost:4000/admin/registrar_Docente HTTP/1.1
+Content-Type: application/json
+
+{
+    "tipoDoc": "CC",
+    "numeroId": "1000120998",
+    "nombres": "Alexandra",
+    "apellidos": "Ordoñez",
+    "fechaNacimiento": "1999-08-24",
+    "genero": "masculino",
+   "correo": "Alexandrao@gmail.com",
+   "celular": "3114555143"
+}
+
+
+
+###
+POST http://localhost:4000/actividades/registrar HTTP/1.1 
+Content-Type: application/json
+
+{
+    "Nombre_actividad": "Manicure",
+    "anho_inicio": 2024,
+    "descripcion": "ponte linda ",
+    "foto":"belleza"
+    
+
+}
+
+
+
+###
+PUT  http://192.168.101.5:4000/actividades/actualizar/3 HTTP/1.1
+Content-Type: application/json
+
+{
+    "Nombre_actividad": "Actuación",
+    "anho_inicio": "2024",
+    "descripcion": "En esta activivdad podras expresar lo que sientes",
+    "foto": "teatro",
+    "Estado_actividad": 1
+}
+
+###
+GET http://192.168.1.106:4000/actividades/mostrar HTTP/1.1
+
+###
+GET http://192.168.1.106:4000/actividades/mostrarInactivas HTTP/1.1

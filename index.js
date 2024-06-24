@@ -25,7 +25,7 @@ const corsOptions = {
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST','PUT','DELETE'],
 };
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use("/",datosRouter);
 app.use("/horario", rutaHorarios);

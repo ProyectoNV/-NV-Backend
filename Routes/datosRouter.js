@@ -134,8 +134,15 @@ rutaDatos.get("/Informacion/usuario/:id_usuario", DocenteController.RenderInfo);
  */
 rutaDatos.put("/actilizar/InfoUser/:id_usuario", DocenteController.ActualizarInfoUser);
 
-rutaDatos.post("/preregistro",preRegistroRecuperarContrasena.PreRegistro)
+rutaDatos.post("/preregistro",preRegistroRecuperarContrasena.PreRegistro);
 
-rutaDatos.put("/recuperarContrasena",preRegistroRecuperarContrasena.RecuperarContrasena)
+rutaDatos.put("/recuperarContrasena",preRegistroRecuperarContrasena.RecuperarContrasena);
+
+rutaDatos.get("/solicitudes", loginController.ObtenerUsuariosPendientes);
+
+rutaDatos.put('/solicitudesaceptar/:id_usuario', loginController.AceptarUsuario);
+
+rutaDatos.delete('/solicitudesrechazar/:id_usuario', loginController.RechazarUsuario);
+
 
 module.exports=rutaDatos;

@@ -161,6 +161,7 @@ AdminRutas.put("/ver_docentes/:id",AdminController.ActualizarDocente)
 
 AdminRutas.delete("/ver_docentes/:id",AdminController.EliminarDocente)
 
+AdminRutas.post("/reportes",AdminController.reporteEstudiante)
 
 AdminRutas.get("/verCantidades",AdminController.BuscarCantidad)
 
