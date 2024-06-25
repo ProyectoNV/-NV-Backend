@@ -34,7 +34,7 @@ app.use("/alumno", rutaAlumno);
 app.use("/actividades", rutaActivi);
 app.use("/docente", rutaDocentes);
 
-app.get("/", (req, res)=>{
+app.get("/prueba", (req, res)=>{
     res.send("Bienvenido a mi API conectandome a MYSQL...");
 });
 
