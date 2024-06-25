@@ -38,9 +38,9 @@ app.get("/prueba", (req, res)=>{
     res.send("Bienvenido a mi API conectandome a MYSQL...");
 });
 
-const puerto =process.env.port || 4000;
+const puerto =process.env.PORT ?? 4000;
 
 app.listen(puerto,()=>{
     console.log(`Escuchando en el puerto ${puerto}`);
-    swaggerJSDOCs(app, 4000);
+    swaggerJSDOCs(app, puerto);
 })
