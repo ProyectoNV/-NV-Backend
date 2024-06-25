@@ -10,6 +10,7 @@ const rutaActivi = require ('./Routes/actividadesRouter')
 const cors = require('cors')
 const {conn} = require('./Model/conn')
 const {swaggerJSDOCs} = require('./swagger') 
+require('dotenv').config()
 
 
 const app = express();
