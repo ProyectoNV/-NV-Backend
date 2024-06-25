@@ -1,27 +1,11 @@
 const mysql = require('mysql2');
-const fs = require('fs');
-const path = require('path');
-
-// Asegúrate de especificar la ruta correcta al certificado CA
-const caCertPath = path.join(__dirname, '../certs/DigiCertGlobalRootCA.crt.pem');
-
-let caCert;
-try {
-    caCert = fs.readFileSync(caCertPath);
-} catch (error) {
-    console.error(`Error al leer el certificado: ${error.message}`);
-    process.exit(1);
-}
 
 const conn = mysql.createConnection({
-    host: "admj2024.mysql.database.azure.com",
-    user: "Proyecto_Grupal",
-    password: "NV2024cordination",
+    host: "localhost",
+    user: "root",
+    password: "12345",
     database: "Db_Cordination",
     port: 3306,
-    ssl: {
-        ca: caCert // Se especifica el certificado CA para la conexión SSL
-    }
 });
 
 conn.connect((error) => {
