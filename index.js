@@ -22,10 +22,6 @@ app.use(session({
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
-const corsOptions = {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST','PUT','DELETE'],
-};
 app.use(cors());
 
 app.use("/",datosRouter);
